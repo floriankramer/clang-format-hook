@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -Eeuo pipefail
+
+SCRIPT_DIR=$(dirname $(realpath ${BASH_SOURCE[0]}))
+
+
+pushd "$SCRIPT_DIR/../../" > /dev/null
+CHANGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+if ! [ -z "$CHANGED_FILES" ] ; then
+  "${SCRIPT_DIR}"/clang-format-hook $CHANGED_FILES
+fi
+popd > /dev/null
+
+
